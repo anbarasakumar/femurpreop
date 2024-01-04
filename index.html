@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Arasu - Femur Preop Planning Platform</title>
+	<script type="x-shader/x-vertex" id="vertexshader">
+
+		attribute float size;
+		attribute vec3 customColor;
+
+		varying vec3 vColor;
+
+		void main() {
+
+			vColor = customColor;
+
+			vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+			gl_PointSize = size * ( 300.0 / -mvPosition.z );
+
+			gl_Position = projectionMatrix * mvPosition;
+
+		}
+
+	</script>
+	<script type="x-shader/x-fragment" id="fragmentshader">
+
+		uniform vec3 color;
+		uniform sampler2D pointTexture;
+		uniform float alphaTest;
+
+		varying vec3 vColor;
+
+		void main() {
+
+			gl_FragColor = vec4( color * vColor, 1.0 );
+
+			gl_FragColor = gl_FragColor * texture2D( pointTexture, gl_PointCoord );
+
+			if ( gl_FragColor.a < alphaTest ) discard;
+
+		}
+
+	</script>
+	<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="./style.css" rel="stylesheet">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<h1 class="maintile">Femur Preop Planning Platform</h1>
+	<div class="mainContentWrap">
+		<div class="leftContentWrap">
+			<div class="labelGroup">
+				<label class="labelRadio">
+					<input type="checkbox" name="updatePoints" value="femurCenter" />
+					<span>Femur Center</span>
+				</label>
+				<label class="labelRadio">
+					<input type="checkbox" name="updatePoints" value="hipCenter" />
+					<span>Hip Center</span>
+				</label>
+				<label class="labelRadio">
+					<input type="checkbox" name="updatePoints" value="femurProximalCanal" />
+					<span>Femur Proximal Canal</span>
+				</label>
+				<label class="labelRadio">
+					<input type="checkbox" name="updatePoints" value="femurDistalCanal" />
+					<span>Femur Distal Canal</span>
+				</label>
+				<label class="labelRadio">
+					<input type="checkbox" name="updatePoints" value="medialEpicondyle" />
+					<span>Medial Epicondyle</span>
+				</label>
+				<label class="labelRadio">
+					<input type="checkbox" name="updatePoints" value="lateralEpicondyle" />
+					<span>Lateral Epicondyle</span>
+				</label>
+				<label class="labelRadio">
+					<input type="checkbox" name="updatePoints" value="distalMedialPt" />
+					<span>Distal Medial Pt</span>
+				</label>
+				<label class="labelRadio">
+					<input type="checkbox" name="updatePoints" value="distalLateralPt" />
+					<span>Distal Lateral Pt</span>
+				</label>
+				<label class="labelRadio">
+					<input type="checkbox" name="updatePoints" value="posteriorMedialPt" />
+					<span>Posterior Medial Pt</span>
+				</label>
+				<label class="labelRadio">
+					<input type="checkbox" name="updatePoints" value="posteriorLateralPt" />
+					<span>Posterior Lateral Pt</span>
+				</label>
+			</div>
+
+			<div class="updateWrap">
+				<a href="javascript:void(0)" class="updateBtn">Update</a>
+			</div>
+		</div>
+		<div class="rightContentWrap">
+			<div class="incDecWrap">
+				<label>Varus/Valgus</label>
+				<div class="inputIncDecWrap">
+					<div class="decBtn"></div>
+					<div><input type="number" name="decBtn" id="varusValgusInp">
+						<span>0</span>&#176;
+					</div>
+					<div class="incBtn"></div>
+				</div>
+			</div>
+			<div class="incDecWrap">
+				<label>Flexion/Extension</label>
+				<div class="inputIncDecWrap">
+					<div class="decBtn"></div>
+					<div><input type="number" name="decBtn" id="flexExtInp">
+						<span>0</span>&#176;
+					</div>
+					<div class="incBtn"></div>
+				</div>
+			</div>
+			<div class="incDecWrap distalResectWrap" style="display: none;">
+				<label>Distal Resection</label>
+				<div class="inputIncDecWrap">
+					<div class="decBtn"></div>
+					<div><input type="number" name="decBtn" id="distalResectInp">
+						<span>0</span>mm
+					</div>
+					<div class="incBtn"></div>
+				</div>
+			</div>
+			<div class="incDecWrap">
+				<label>Resection</label>
+				<div class="inputCheckBoxWrap">
+					<label><input type="checkbox" name="decBtn" id="resectInp">
+						<span></span>
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="mainCanvas"></div>
+	<script type="module" src="./main.js"></script>
+</body>
+
+</html>
